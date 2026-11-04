@@ -1,0 +1,54 @@
+{
+  "name": "ulai-agents",
+  "version": "0.1.0",
+  "description": "Build voice agents on the Ulai agent server.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ulaidotin/agent-sdk-js.git"
+  },
+  "homepage": "https://github.com/ulaidotin/agent-sdk-js#readme",
+  "bugs": {
+    "url": "https://github.com/ulaidotin/agent-sdk-js/issues"
+  },
+  "keywords": [
+    "voice",
+    "agent",
+    "ulai",
+    "grpc"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "build:test": "rm -rf test-dist && tsc -p tsconfig.test.json",
+    "typecheck:example": "tsc -p tsconfig.example.json",
+    "test": "npm run build && npm run build:test && npm run typecheck:example && node --test test-dist/*.test.js",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm test"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.16.0",
+    "@connectrpc/connect": "2.1.2",
+    "@connectrpc/connect-node": "2.1.2",
+    "ulai-agent-protocol": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "typescript": "5.9.3"
+  }
+}
