@@ -149,6 +149,19 @@ export const Role = {
 } as const;
 export type Role = ValueOf<typeof Role>;
 
+/**
+ * How the agent server carries a room's audio to the media server. Your code
+ * never handles audio either way; this only picks the agent server's
+ * connection.
+ */
+export const Transport = {
+  /** Opus frames over a WebSocket. The default. */
+  WebSocket: "websocket",
+  /** Opus over a WebRTC peer connection. */
+  WebRTC: "webrtc",
+} as const;
+export type Transport = ValueOf<typeof Transport>;
+
 // ─── Internal tables ─────────────────────────────────────────────────────────
 
 /** The server's names for its backends. Chosen through the pipeline classes. */

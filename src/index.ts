@@ -85,6 +85,7 @@ export {
   Opening,
   RealtimeModel,
   Role,
+  Transport,
   STTModel,
   UlaiLiveVoice,
   VAD,

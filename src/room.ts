@@ -1,5 +1,7 @@
 import { inspect, type InspectOptionsStylized } from "node:util";
 
+import type { Transport } from "./models.js";
+
 /**
  * A room that already exists, and where it lives. The server never creates
  * rooms: an agent alone in a room nobody was told about would talk to no one.
@@ -14,6 +16,11 @@ export interface RoomLike {
   readonly url: string;
   /** Authenticates to that control plane. */
   readonly token?: string;
+  /**
+   * How the agent server carries the room's audio to the media server:
+   * `Transport.WebSocket` or `Transport.WebRTC`. Unset is WebSocket.
+   */
+  readonly transport?: Transport;
 }
 
 const redacted = (secret: string): string => (secret === "" ? "" : "[redacted]");
@@ -25,12 +32,16 @@ const redacted = (secret: string): string => (secret === "" ? "" : "[redacted]")
 export class Room implements RoomLike {
   readonly id: string;
   readonly url: string;
+  readonly transport?: Transport;
   readonly #token: string;
 
   constructor(room: RoomLike) {
     this.id = room.id;
     this.url = room.url;
     this.#token = room.token ?? "";
+    if (room.transport !== undefined) {
+      this.transport = room.transport;
+    }
   }
 
   /** Authenticates to the control plane. */
@@ -39,11 +50,12 @@ export class Room implements RoomLike {
   }
 
   toString(): string {
-    return `Room{id:${this.id} url:${this.url} token:${redacted(this.#token)}}`;
+    const transport = this.transport ? ` transport:${this.transport}` : "";
+    return `Room{id:${this.id} url:${this.url} token:${redacted(this.#token)}${transport}}`;
   }
 
-  toJSON(): { id: string; url: string; token: string } {
-    return { id: this.id, url: this.url, token: redacted(this.#token) };
+  toJSON(): { id: string; url: string; token: string; transport?: Transport } {
+    return { id: this.id, url: this.url, token: redacted(this.#token), ...(this.transport ? { transport: this.transport } : {}) };
   }
 
   [inspect.custom](_depth: number, options: InspectOptionsStylized, show: typeof inspect): string {

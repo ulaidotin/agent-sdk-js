@@ -1,6 +1,6 @@
 {
   "name": "ulai-agents",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build voice agents on the Ulai agent server.",
   "license": "Apache-2.0",
   "repository": {
@@ -45,7 +45,7 @@
     "@bufbuild/protobuf": "^2.16.0",
     "@connectrpc/connect": "2.1.2",
     "@connectrpc/connect-node": "2.1.2",
-    "ulai-agent-protocol": "^0.1.0"
+    "ulai-agent-protocol": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "20.19.43",

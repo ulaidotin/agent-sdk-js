@@ -11,9 +11,11 @@ import {
   Room as RoomService,
   Session as SessionService,
   SubscribeRequestSchema,
+  MediaTransport,
 } from "ulai-agent-protocol/ulai/agent/v1";
 
 import { agentProblems, agentProfile, openingToPB, type Agent } from "./agent.js";
+import { Transport } from "./models.js";
 import { apiError, CanceledError, roomError, UnavailableError, ValidationError } from "./errors.js";
 import { Seat, type LeaveOptions, type LeaveResult, type RoomLike } from "./room.js";
 import { attachSession, type AttachOptions, type Session } from "./session.js";
@@ -279,6 +281,11 @@ export class Client {
     if (typeof room?.url !== "string" || room.url === "") {
       problems.push("join needs room.url, the control plane holding the room");
     }
+    // Not a list check: these are the only two the server can dial.
+    const transport = transportToPB(room?.transport);
+    if (transport === undefined) {
+      problems.push(`unknown room.transport ${JSON.stringify(room.transport)}: use Transport.WebSocket or Transport.WebRTC`);
+    }
     let fields = "";
     if (options.fields && Object.keys(options.fields).length > 0) {
       try {
@@ -300,6 +307,7 @@ export class Client {
       roomUrl: room.url,
       roomToken: room.token ?? "",
       profile: agentProfile(agent),
+      transport: transport ?? MediaTransport.UNSPECIFIED,
     });
     let resp;
     try {
@@ -529,5 +537,20 @@ export class Client {
   /** Releases the connection. Calls in progress on the server carry on. */
   close(): void {
     this.#connection.abort();
+  }
+}
+
+/** The proto value for a room's transport; undefined for one no server knows. */
+function transportToPB(t: unknown): MediaTransport | undefined {
+  switch (t) {
+    case undefined:
+    case "":
+      return MediaTransport.UNSPECIFIED;
+    case Transport.WebSocket:
+      return MediaTransport.WEBSOCKET;
+    case Transport.WebRTC:
+      return MediaTransport.WEBRTC;
+    default:
+      return undefined;
   }
 }
