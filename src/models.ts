@@ -122,11 +122,14 @@ export const Language = {
 export type Language = ValueOf<typeof Language>;
 
 /**
- * What judges who answered a dialled call: a person, a voicemail greeting, a
+ * What judged who answered a dialled call: a person, a voicemail greeting, a
  * ringtone. Used by `options.classifier`.
+ *
+ * @deprecated Ulai no longer detects voicemail, so `options.classifier` has no
+ * effect on the call.
  */
 export const ClassifierBackend = {
-  /** The server's default. */
+  /** The server's former default. */
   GeminiLive: "gemini-live",
 } as const;
 export type ClassifierBackend = ValueOf<typeof ClassifierBackend>;

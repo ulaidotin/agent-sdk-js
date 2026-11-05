@@ -179,7 +179,7 @@ export interface Ended {
   readonly heardMs: number;
   /**
    * Why, in the server's words: ended, terminated, max_duration, no_response,
-   * voicemail, CALL_FAILED.
+   * CALL_FAILED.
    */
   readonly endReason: string;
   /** The call's latency figures, when the server kept them. */

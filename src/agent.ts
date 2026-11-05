@@ -90,7 +90,12 @@ export interface AgentOptions {
    * it. Default: on. Declaring your own end_call tool replaces the server's.
    */
   endCallTool?: boolean;
-  /** Ends outbound calls that reach a voicemail greeting. */
+  /**
+   * Asked for outbound calls that reach a voicemail greeting to be ended.
+   *
+   * @deprecated Ulai no longer detects voicemail, so this has no effect on the
+   * call. It is still accepted and sent, so code that sets it keeps working.
+   */
   voicemailDetection?: boolean;
   /** Re-sends what the caller said while the model was reconnecting. */
   replayLostUtterances?: boolean;
@@ -102,7 +107,12 @@ export interface AgentOptions {
   contextCompression?: boolean;
   /** Turns off all caller-audio processing except the denoiser. A diagnostic. */
   minimalAudioProcessing?: boolean;
-  /** Judges what answered a dialled call. */
+  /**
+   * Judged what answered a dialled call.
+   *
+   * @deprecated Ulai no longer detects voicemail, so this has no effect on the
+   * call.
+   */
   classifier?: ClassifierBackend;
   /** The account the call belongs to, passed through to the server untouched. */
   workspaceId?: string;
